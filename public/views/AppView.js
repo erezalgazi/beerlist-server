@@ -13,10 +13,32 @@ var AppView = Backbone.View.extend({
 
     this.$beerList = this.$('.beer-list');
 
+    this.$beersContainer = this.$('.beers-container');
+    this.$reviewsContainer = this.$('.reviews-container');
+
     this.listenTo(this.model.get('beers'), 'add', this.addBeer);
-    // this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
+    this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
+
+    this.listenTo(this.model, 'change:show_reviews', this.renderView);
+    this.listenTo(this.model, 'change:current_beer', this.renderDetailView);
+
+    this.detailView = null;
 
     this.renderBeers();
+  },
+  renderView: function () {
+    this.$reviewsContainer.toggleClass('show', this.model.get('show_reviews'));
+    this.$beersContainer.toggleClass('show', !this.model.get('show_reviews'));
+  },
+
+  renderDetailView: function () {
+    if (this.detailView) {
+      this.detailView.remove();
+    }
+
+    this.detailView = new BeerDetailView({ model: this.model.get('current_beer')});
+  
+    this.$reviewsContainer.append(this.detailView.render().el);
   },
 
   createBeer: function () {
@@ -25,7 +47,7 @@ var AppView = Backbone.View.extend({
       style: this.$styleInput.val(),
       abv: this.$abvInput.val(),
       image_url: this.$imgUrl.val()
-    });
+    }, {wait: true});
   },
 
   addBeer: function (beer) {

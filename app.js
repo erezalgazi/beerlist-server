@@ -4,7 +4,8 @@ var bodyParser = require('body-parser');
 
 mongoose.connect('mongodb://localhost/beers');
 
-var Beer = require("./BeerModel");
+var Beer = require("./models/BeerModel");
+var Review = require("./models/ReviewModel");
 
 var app = express();
 
@@ -22,14 +23,6 @@ app.get('/beers', function (req, res) {
 
 app.post('/beers', function (req, res, next) {
   var beer = new Beer(req.body);
-
-  var body = [];
-
-  req.on('data', function(chunk) {
-    body.push(chunk);
-  });
-
-  console.log(body);
 
   beer.save(function(err, beer) {
     if (err) { return next(err); }
@@ -59,6 +52,37 @@ app.delete('/beers/:id', function (req, res) {
       beer.remove();
       res.status(204);
       res.end();
+    }
+  });
+});
+
+app.post('/beers/:id/reviews', function(req, res, next) {
+  Beer.findById(req.params.id, function(error, beer) {
+    var review = new Review(req.body);
+
+    review.save(function(err, review) {
+      if (err) { return next(err); }
+
+      beer.reviews.push(review);
+      beer.save(function (err, beer) {
+        if (err) { return next(err); }
+
+        res.json(review);
+      });
+    });
+  });
+});
+
+app.delete('/beers/:beer/reviews/:review', function(req, res, next) {
+  Beer.findById(req.params.beer, function (err, beer) {
+    for (var i = 0; i < beer.reviews.length; i ++) {
+      if (beer.reviews[i]["_id"] == req.params.review) {
+        beer.reviews.splice(i, 1);
+        beer.save();
+
+        res.status(204);
+        res.end();
+      }
     }
   });
 });
