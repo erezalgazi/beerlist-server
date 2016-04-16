@@ -14,7 +14,7 @@ var AppView = Backbone.View.extend({
     this.$beerList = this.$('.beer-list');
 
     this.listenTo(this.model.get('beers'), 'add', this.addBeer);
-    // this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
+    this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
 
     this.renderBeers();
   },

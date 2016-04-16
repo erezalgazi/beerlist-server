@@ -7,7 +7,7 @@ var BeerView = Backbone.View.extend({
     'click .remove': 'removeBeer',
     'click .edit': 'toggleEditMode',
     'keypress .edit-mode': 'updateOnEnter',
-    'blur .edit': 'close'
+    'blur .edit-mode': 'close'
   },
 
   initialize: function () {
@@ -48,6 +48,7 @@ var BeerView = Backbone.View.extend({
 
     this.model.set('name', value);
     this.model.set('edit_mode', false);
+    this.save();
   },
 
   render: function () {

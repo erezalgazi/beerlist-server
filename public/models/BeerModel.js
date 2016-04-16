@@ -1,4 +1,6 @@
 var BeerModel = Backbone.Model.extend({
+  idAttribute: '_id',
+
   defaults: {
     id: null,
     name: '',
@@ -6,11 +8,5 @@ var BeerModel = Backbone.Model.extend({
     image_url: '',
     abv: null,
     edit_mode: false
-  },
-
-  parse: function (response) {
-    response.id = response._id;
-
-    return response;
   }
 });
