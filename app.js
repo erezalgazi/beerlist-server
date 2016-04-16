@@ -22,7 +22,7 @@ app.get('/beers', function (req, res) {
 });
 
 app.post('/beers', function (req, res, next) {
-  var beer = new Beer(req.body);
+  var beer = new Beer(req.body);sr
 
   beer.save(function(err, beer) {
     if (err) { return next(err); }
@@ -57,13 +57,16 @@ app.delete('/beers/:id', function (req, res) {
 });
 
 app.post('/beers/:id/reviews', function(req, res, next) {
-  Beer.findById(req.params.id, function(error, beer) {
+  Beer.findById(req.params.id, function(err, beer) {
+    if (err) { return next(err); }
+
     var review = new Review(req.body);
 
     review.save(function(err, review) {
       if (err) { return next(err); }
 
       beer.reviews.push(review);
+      
       beer.save(function (err, beer) {
         if (err) { return next(err); }
 
