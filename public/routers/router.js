@@ -7,15 +7,12 @@ var BeerRouter = Backbone.Router.extend({
   showReviews: function (param) {
     var allBeers = appModel.get('beers');
 
-    var currentBeer = allBeers.findWhere({ _id: param });
+    allBeers.fetch({success: function () {
+      var currentBeer = allBeers.findWhere({ _id: param });
 
-    // only navigate to the current beer if one exists
-    if (currentBeer) {
       appModel.set('current_beer', currentBeer);
       appModel.set('show_reviews', true);
-    } else {
-      this.navigate("/#", true)
-    }
+    }});
   },
 
   showBeers: function () {
