@@ -48,7 +48,7 @@ var BeerView = Backbone.View.extend({
 
     this.model.set('name', value);
     this.model.set('edit_mode', false);
-    this.save();
+    this.model.save();
   },
 
   render: function () {
