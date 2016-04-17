@@ -22,7 +22,7 @@ app.get('/beers', function (req, res) {
 });
 
 app.post('/beers', function (req, res, next) {
-  var beer = new Beer(req.body);sr
+  var beer = new Beer(req.body);
 
   beer.save(function(err, beer) {
     if (err) { return next(err); }

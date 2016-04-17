@@ -4,5 +4,7 @@ var appView = new AppView({ model: appModel });
 
 appModel.get('beers').fetch({reset: true});
 
-var beerRouter = new BeerRouter();
-Backbone.history.start();
+appModel.get('beers').fetch({success: function () {
+  var beerRouter = new BeerRouter();
+  Backbone.history.start();
+}}, {reset: true});

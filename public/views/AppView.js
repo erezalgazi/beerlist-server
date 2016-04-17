@@ -23,9 +23,8 @@ var AppView = Backbone.View.extend({
     this.listenTo(this.model, 'change:current_beer', this.renderDetailView);
 
     this.detailView = null;
-
-    this.renderBeers();
   },
+
   renderView: function () {
     this.$reviewsContainer.toggleClass('show', this.model.get('show_reviews'));
     this.$beersContainer.toggleClass('show', !this.model.get('show_reviews'));
