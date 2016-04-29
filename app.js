@@ -61,18 +61,7 @@ app.post('/beers/:id/reviews', function(req, res, next) {
     if (err) { return next(err); }
 
     var review = new Review(req.body);
-
-    review.save(function(err, review) {
-      if (err) { return next(err); }
-
-      beer.reviews.push(review);
-      
-      beer.save(function (err, beer) {
-        if (err) { return next(err); }
-
-        res.json(review);
-      });
-    });
+    beer.reviews.push(review);
   });
 });
 
