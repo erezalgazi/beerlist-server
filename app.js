@@ -56,12 +56,19 @@ app.delete('/beers/:id', function (req, res) {
   });
 });
 
-app.post('/beers/:id/reviews', function(req, res, next) {
+app.post('/beers/:id/reviews', auth, function(req, res, next) {
   Beer.findById(req.params.id, function(err, beer) {
     if (err) { return next(err); }
 
     var review = new Review(req.body);
+
     beer.reviews.push(review);
+
+    beer.save(function (err, beer) {
+      if (err) { return next(err); }
+    
+      res.json(review);
+    });
   });
 });
 
