@@ -6,6 +6,7 @@ mongoose.connect('mongodb://localhost/beers');
 
 var Beer = require("./models/BeerModel");
 var Review = require("./models/ReviewModel");
+var User = require("./models/UserModel");
 
 var app = express();
 
@@ -14,6 +15,17 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static('public'));
 app.use(express.static('node_modules'));
+
+//---------
+//for authentication
+var passport = require('passport');
+var expressSession = require('express-session');
+
+app.use(expressSession({secret: 'mySecretKey'}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+//-----------
 
 app.get('/beers', function (req, res) {
   Beer.find(function (error, beers) {
@@ -85,5 +97,53 @@ app.delete('/beers/:beer/reviews/:review', function(req, res, next) {
     }
   });
 });
+
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+  console.log('serializeUser happens only at the end of the registration');
+});
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
+var LocalStrategy = require('passport-local').Strategy;
+
+passport.use('register', new LocalStrategy(function (username, password, done) {
+  User.findOne({ 'username': username }, function (err, user) {
+    if (err) {
+      console.log('Error in SignUp: ' + err);
+      return done(err);
+    }
+    if (user) {
+      console.log('User already exists');
+      return done(null, false);
+    } else {
+      var newUser = new User();
+      newUser.username = username;
+      newUser.password = password;
+
+      newUser.save(function (err) {
+        if (err) {
+          console.log('Error in Saving user: ' + err);
+          throw err;
+        }
+        console.log('User Registration successful');
+        return done(null, newUser);
+      });
+    }
+  });
+}));
+
+app.post('/register', passport.authenticate('register'), function (req, res) {
+  console.log('register',req.user);
+  res.json(req.user);
+});
+
+app.get('/currentUser', function (req, res) {
+  console.log('4',req.user);
+  res.send(req.user);
+});
+
 
 app.listen(8000);

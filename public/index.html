@@ -42,6 +42,19 @@
         </div>
 
         <div class="reviews-container"></div>
+        <div class="register-container">
+          <form>
+            <h3>Register</h3>
+
+            <div class="form-group">
+              <input type="text" id="register-username" class="form-control" placeholder="Username" name="username">
+            </div>
+            <div class="form-group">
+              <input type="password" id="register-password" class="form-control" placeholder="Password" name="password">
+            </div>
+            <button class="btn btn-primary register">Register</button>
+          </form>    
+        </div>
       </div>
     </div>
   </div>
@@ -93,12 +106,15 @@
 
   <script src="models/BeerModel.js"></script>
   <script src="models/ReviewModel.js"></script>
+  <script src="models/UserModel.js"></script>
+  <script src="models/UserModel.js"></script>
   <script src="collections/BeersCollection.js"></script>
   <script src="collections/ReviewsCollection.js"></script>
   <script src="models/AppModel.js"></script>
   <script src="views/AppView.js"></script>
   <script src="views/BeerView.js"></script>
   <script src="views/ReviewView.js"></script>
+  <script src="views/RegisterView.js"></script>
   <script src="views/BeerDetailView.js"></script>
   <script src="routers/router.js"></script>
   <script src="main.js"></script>

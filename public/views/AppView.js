@@ -15,19 +15,30 @@ var AppView = Backbone.View.extend({
 
     this.$beersContainer = this.$('.beers-container');
     this.$reviewsContainer = this.$('.reviews-container');
+    this.$registerContainer = this.$('.register-container');
 
     this.listenTo(this.model.get('beers'), 'add', this.addBeer);
     this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
 
-    this.listenTo(this.model, 'change:show_reviews', this.renderView);
+    this.listenTo(this.model, 'change:view', this.renderView);
     this.listenTo(this.model, 'change:current_beer', this.renderDetailView);
 
     this.detailView = null;
   },
 
   renderView: function () {
-    this.$reviewsContainer.toggleClass('show', this.model.get('show_reviews'));
-    this.$beersContainer.toggleClass('show', !this.model.get('show_reviews'));
+    var view = this.model.get('view');
+    var viewMap = {
+      'beers': this.$beersContainer,
+      'reviews': this.$reviewsContainer,
+      'register': this.$registerContainer
+    };
+    _.each(viewMap, function (value,key,list) {
+      value.removeClass('show');
+    });
+    viewMap[view].addClass('show');
+    // this.$reviewsContainer.toggleClass('show', this.model.get('show_reviews'));
+    // this.$beersContainer.toggleClass('show', !this.model.get('show_reviews'));
   },
 
   renderDetailView: function () {
@@ -47,6 +58,10 @@ var AppView = Backbone.View.extend({
       abv: this.$abvInput.val(),
       image_url: this.$imgUrl.val()
     }, {wait: true});
+      this.$nameInput.val(''),
+      this.$styleInput.val(''),
+      this.$abvInput.val(''),
+      this.$imgUrl.val('')
   },
 
   addBeer: function (beer) {

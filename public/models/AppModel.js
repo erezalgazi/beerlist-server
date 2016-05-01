@@ -6,7 +6,8 @@ var AppModel = Backbone.Model.extend({
       current_beer: null,
 
       // either true or false
-      show_reviews: false
+      // show_reviews: false
+      view: 'beers' //beers here is just a string
     }
   },
 
